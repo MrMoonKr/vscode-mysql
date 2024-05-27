@@ -33,13 +33,13 @@
         "onCommand:mysql.addConnection",
         "onCommand:mysql.runQuery"
     ],
-    "main": "./out/extension",
+    "main": "./out/extension.js",
     "contributes": {
         "views": {
             "explorer": [
                 {
                     "id": "mysql",
-                    "name": "MySQL"
+                    "name": "MySQL ( 브라우저 )"
                 }
             ]
         },
@@ -145,7 +145,7 @@
             "properties": {
                 "vscode-mysql.enableTelemetry": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Whether to enable anonymous usage collection."
                 },
                 "vscode-mysql.maxTableCount": {

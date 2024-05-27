@@ -9,40 +9,47 @@ import { TableNode } from "./model/tableNode";
 import { MySQLTreeDataProvider } from "./mysqlTreeDataProvider";
 import { Global } from "./common/global";
 
-export function activate(context: vscode.ExtensionContext) {
-    AppInsightsClient.sendEvent("loadExtension");
 
-    const mysqlTreeDataProvider = new MySQLTreeDataProvider(context);
+/**
+ * 활성화 콜백 함수
+ * @param context 
+ */
+export function activate( context: vscode.ExtensionContext ) {
     
+    AppInsightsClient.sendEvent( "loadExtension" );
+
+    const mysqlTreeDataProvider = new MySQLTreeDataProvider( context );
+
     Global.secrets = context.secrets;
 
-    context.subscriptions.push(vscode.window.registerTreeDataProvider("mysql", mysqlTreeDataProvider));
+    context.subscriptions.push( vscode.window.registerTreeDataProvider( "mysql", mysqlTreeDataProvider ) );
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.refresh", (node: INode) => {
-        AppInsightsClient.sendEvent("refresh");
-        mysqlTreeDataProvider.refresh(node);
-    }));
+    context.subscriptions.push( vscode.commands.registerCommand( "mysql.refresh", ( node: INode ) => {
+        AppInsightsClient.sendEvent( "refresh" );
+        mysqlTreeDataProvider.refresh( node );
+    } ) );
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.addConnection", () => {
+    context.subscriptions.push( vscode.commands.registerCommand( "mysql.addConnection", () => {
         mysqlTreeDataProvider.addConnection();
-    }));
+    } ) );
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.deleteConnection", (connectionNode: ConnectionNode) => {
-        connectionNode.deleteConnection(context, mysqlTreeDataProvider);
-    }));
+    context.subscriptions.push( vscode.commands.registerCommand( "mysql.deleteConnection", ( connectionNode: ConnectionNode ) => {
+        connectionNode.deleteConnection( context, mysqlTreeDataProvider );
+    } ) );
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.runQuery", () => {
+    context.subscriptions.push( vscode.commands.registerCommand( "mysql.runQuery", () => {
         Utility.runQuery();
-    }));
+    } ) );
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.newQuery", (databaseOrConnectionNode: DatabaseNode | ConnectionNode) => {
+    context.subscriptions.push( vscode.commands.registerCommand( "mysql.newQuery", ( databaseOrConnectionNode: DatabaseNode | ConnectionNode ) => {
         databaseOrConnectionNode.newQuery();
-    }));
+    } ) );
 
-    context.subscriptions.push(vscode.commands.registerCommand("mysql.selectTop1000", (tableNode: TableNode) => {
+    context.subscriptions.push( vscode.commands.registerCommand( "mysql.selectTop1000", ( tableNode: TableNode ) => {
         tableNode.selectTop1000();
-    }));
+    } ) );
 }
 
 export function deactivate() {
+    // do nothing
 }
