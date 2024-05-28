@@ -110,8 +110,8 @@ export class Utility {
             }
 
             if ( err ) {
-                OutputChannel.appendLine( err );
-                AppInsightsClient.sendEvent( "runQuery.end", { Result: "Fail", ErrorMessage: err } );
+                OutputChannel.appendLine( err.message );
+                AppInsightsClient.sendEvent( "runQuery.end", { Result: "Fail", ErrorMessage: err.message } );
             } else {
                 AppInsightsClient.sendEvent( "runQuery.end", { Result: "Success" } );
             }
@@ -125,8 +125,18 @@ export class Utility {
         return vscode.window.showTextDocument( textDocument );
     }
 
-    public static createConnection( connectionOptions: IConnection ): any {
-        const newConnectionOptions: any = Object.assign( {}, connectionOptions );
+    public static createConnection( connectionOptions: IConnection ): mysql.Connection {
+
+        //const newConnectionOptions: any = Object.assign( {}, connectionOptions );
+        const newConnectionOptions: mysql.ConnectionConfig = {
+            host: connectionOptions.host,
+            user: connectionOptions.user,
+            password: connectionOptions.password,
+            port: parseInt( connectionOptions.port, 10 ),
+            database: connectionOptions.database,
+            multipleStatements: true,
+        };
+
         if ( connectionOptions.certPath && fs.existsSync( connectionOptions.certPath ) ) {
             newConnectionOptions.ssl = {
                 ca: fs.readFileSync( connectionOptions.certPath ),
